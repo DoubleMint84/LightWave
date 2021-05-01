@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Alarms"
+        android:textSize="22sp"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textFirstAl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textAlarm"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Alarm 1"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textSecondAl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textFirstAl"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Alarm 2"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textThirdAl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textSecondAl"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Alarm 3"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textForthAl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textThirdAl"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Alarm 4"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textFifthAl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textForthAl"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Alarm 5"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/butAlFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textAlarm"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textFirstAl"
+        android:text="0:00"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAl1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textAlarm"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/butAlFirst"
+        android:text="@string/switch_label_state"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/butAlSecond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textFirstAl"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textSecondAl"
+        android:text="0:00"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAl2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textFirstAl"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/butAlSecond"
+        android:text="@string/switch_label_state"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/butAlThird"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textSecondAl"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textSecondAl"
+        android:text="0:00"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAl3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textSecondAl"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/butAlThird"
+        android:text="@string/switch_label_state"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/butAlForth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textThirdAl"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textThirdAl"
+        android:text="0:00"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAl4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textThirdAl"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/butAlForth"
+        android:text="@string/switch_label_state"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/butAlFifth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textForthAl"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textForthAl"
+        android:text="0:00"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAl5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textForthAl"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/butAlFifth"
+        android:text="@string/switch_label_state"
+        android:textSize="20sp" />
+
+
+</RelativeLayout>

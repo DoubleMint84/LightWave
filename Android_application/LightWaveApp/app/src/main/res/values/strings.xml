@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LightWave</string>
+    <string name="switch_label_state">State</string>
+</resources>
