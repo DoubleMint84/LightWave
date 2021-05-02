@@ -6,71 +6,96 @@
         android:id="@+id/textAlarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Alarms"
-        android:textSize="22sp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/text_alarms"
+        android:textAlignment="center"
+        android:textSize="25sp"
         android:visibility="visible" />
 
     <TextView
-        android:id="@+id/textFirstAl"
-        android:layout_width="wrap_content"
+        android:id="@+id/text1Al"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textAlarm"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:text="Alarm 1"
+        android:text="@string/dow_monday"
         android:textSize="22sp" />
 
     <TextView
-        android:id="@+id/textSecondAl"
-        android:layout_width="wrap_content"
+        android:id="@+id/text2Al"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textFirstAl"
+        android:layout_below="@+id/text1Al"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:text="Alarm 2"
+        android:text="@string/dow_tuesday"
         android:textSize="22sp" />
 
     <TextView
-        android:id="@+id/textThirdAl"
-        android:layout_width="wrap_content"
+        android:id="@+id/text3Al"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textSecondAl"
+        android:layout_below="@+id/text2Al"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:text="Alarm 3"
+        android:text="@string/dow_wednesday"
         android:textSize="22sp" />
 
     <TextView
-        android:id="@+id/textForthAl"
-        android:layout_width="wrap_content"
+        android:id="@+id/text4Al"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textThirdAl"
+        android:layout_below="@+id/text3Al"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:text="Alarm 4"
+        android:text="@string/dow_thursday"
         android:textSize="22sp" />
 
     <TextView
-        android:id="@+id/textFifthAl"
-        android:layout_width="wrap_content"
+        android:id="@+id/text5Al"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textForthAl"
+        android:layout_below="@+id/text4Al"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:text="Alarm 5"
+        android:text="@string/dow_friday"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/text6Al"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text5Al"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/dow_saturday"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/text7Al"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text6Al"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/dow_sunday"
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/butAlFirst"
+        android:id="@+id/butAl1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textAlarm"
-        android:layout_marginStart="31dp"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/textFirstAl"
-        android:text="0:00"
+        android:layout_toEndOf="@+id/text1Al"
+        android:text="@string/time_midnight"
         android:textSize="20sp" />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -78,99 +103,165 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textAlarm"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/butAlFirst"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/butAl1"
         android:text="@string/switch_label_state"
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/butAlSecond"
+        android:id="@+id/butAl2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textFirstAl"
-        android:layout_marginStart="31dp"
+        android:layout_below="@+id/text1Al"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/textSecondAl"
-        android:text="0:00"
+        android:layout_toEndOf="@+id/text2Al"
+        android:text="@string/time_midnight"
         android:textSize="20sp" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/swAl2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textFirstAl"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/butAlSecond"
+        android:layout_below="@+id/text1Al"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/butAl2"
         android:text="@string/switch_label_state"
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/butAlThird"
+        android:id="@+id/butAl3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textSecondAl"
-        android:layout_marginStart="31dp"
+        android:layout_below="@+id/text2Al"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/textSecondAl"
-        android:text="0:00"
+        android:layout_toEndOf="@+id/text3Al"
+        android:text="@string/time_midnight"
         android:textSize="20sp" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/swAl3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textSecondAl"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/butAlThird"
+        android:layout_below="@+id/text2Al"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/butAl3"
         android:text="@string/switch_label_state"
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/butAlForth"
+        android:id="@+id/butAl4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textThirdAl"
-        android:layout_marginStart="31dp"
+        android:layout_below="@+id/text3Al"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/textThirdAl"
-        android:text="0:00"
+        android:layout_toEndOf="@+id/text4Al"
+        android:text="@string/time_midnight"
         android:textSize="20sp" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/swAl4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textThirdAl"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/butAlForth"
+        android:layout_below="@+id/text3Al"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/butAl4"
         android:text="@string/switch_label_state"
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/butAlFifth"
+        android:id="@+id/butAl5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textForthAl"
-        android:layout_marginStart="31dp"
+        android:layout_below="@+id/text4Al"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/textForthAl"
-        android:text="0:00"
+        android:layout_toEndOf="@+id/text5Al"
+        android:text="@string/time_midnight"
         android:textSize="20sp" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/swAl5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textForthAl"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/butAlFifth"
+        android:layout_below="@+id/text4Al"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/butAl5"
         android:text="@string/switch_label_state"
         android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/butAl6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text5Al"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/text6Al"
+        android:text="@string/time_midnight"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAl6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text5Al"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/butAl6"
+        android:text="@string/switch_label_state"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/butAl7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text6Al"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/text7Al"
+        android:text="@string/time_midnight"
+        android:textSize="20sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAl7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text6Al"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/butAl7"
+        android:text="@string/switch_label_state"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/text_dawn_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text7Al"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/text_dawn_time"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/butDawnTime"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text7Al"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/text_dawn_time"
+        android:text="@string/zero_min"
+        android:textSize="20sp" />
+
 
 
 </RelativeLayout>

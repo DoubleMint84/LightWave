@@ -3,9 +3,9 @@ package com.m1nt.lightwave;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -16,8 +16,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TimePicker;
@@ -28,10 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.UUID;
-
-import static android.R.layout.simple_list_item_1;
 
 public class MainActivity extends AppCompatActivity implements ConnectFragment.onSomeEventListener, LampFragment.onLampListener, AlarmsFragment.onAlarmListener {
 
@@ -46,14 +41,14 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     private static final String TAG = "myLogs";
 
 
-    public AlarmRecord[] alarmRecord = new AlarmRecord[5];
+    public AlarmRecord[] alarmRecord = new AlarmRecord[7];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //myThreadConnectBTDevice = new ThreadConnectBTdevice();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             alarmRecord[i] = new AlarmRecord();
             alarmRecord[i].hrs = 0;
             alarmRecord[i].min = 0;
@@ -101,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @SuppressLint("NonConstantResourceId")
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
@@ -124,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
                     break;
             }
 
+            assert selectedFragment != null;
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
             return true;
         }
@@ -188,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     }
 
     TimePickerDialog.OnTimeSetListener tPick = new TimePickerDialog.OnTimeSetListener() {
+        @SuppressLint("SetTextI18n")
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             alarmRecord[currentAl].hrs = hourOfDay;
@@ -199,22 +197,28 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
             Button but;
             switch (currentAl) {
                 case 0:
-                    but = findViewById(R.id.butAlFirst);
+                    but = findViewById(R.id.butAl1);
                     break;
                 case 1:
-                    but = findViewById(R.id.butAlSecond);
+                    but = findViewById(R.id.butAl2);
                     break;
                 case 2:
-                    but = findViewById(R.id.butAlThird);
+                    but = findViewById(R.id.butAl3);
                     break;
                 case 3:
-                    but = findViewById(R.id.butAlForth);
+                    but = findViewById(R.id.butAl4);
                     break;
                 case 4:
-                    but = findViewById(R.id.butAlFifth);
+                    but = findViewById(R.id.butAl5);
+                    break;
+                case 5:
+                    but = findViewById(R.id.butAl6);
+                    break;
+                case 6:
+                    but = findViewById(R.id.butAl7);
                     break;
                 default:
-                    but = findViewById(R.id.butAlFirst);
+                    but = findViewById(R.id.butAl1);
                     break;
             }
             if (alarmRecord[currentAl].min > 9) {

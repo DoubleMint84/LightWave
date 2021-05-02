@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">LightWave</string>
     <string name="switch_label_state">State</string>
+    <string name="dow_monday">Monday</string>
+    <string name="dow_tuesday">Tuesday</string>
+    <string name="dow_wednesday">Wednesday</string>
+    <string name="dow_thursday">Thursday</string>
+    <string name="dow_friday">Friday</string>
+    <string name="dow_saturday">Saturday</string>
+    <string name="dow_sunday">Sunday</string>
+    <string name="time_midnight">0:00</string>
+    <string name="text_alarms">Alarms</string>
+    <string name="text_dawn_time">Dawn time</string>
+    <string name="zero_min">0 min</string>
 </resources>

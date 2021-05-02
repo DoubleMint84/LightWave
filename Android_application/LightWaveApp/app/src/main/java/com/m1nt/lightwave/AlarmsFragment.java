@@ -8,17 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 public class AlarmsFragment extends Fragment {
-    private final Button[] setTimeBut = new Button[5];
-    private final SwitchCompat[] stateAl = new SwitchCompat[5];
+    private final Button[] setTimeBut = new Button[7];
+    private final SwitchCompat[] stateAl = new SwitchCompat[7];
 
 
 
@@ -45,17 +43,21 @@ public class AlarmsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_alarms, container, false);
-        setTimeBut[0] = v.findViewById(R.id.butAlFirst);
-        setTimeBut[1] = v.findViewById(R.id.butAlSecond);
-        setTimeBut[2] = v.findViewById(R.id.butAlThird);
-        setTimeBut[3] = v.findViewById(R.id.butAlForth);
-        setTimeBut[4] = v.findViewById(R.id.butAlFifth);
+        setTimeBut[0] = v.findViewById(R.id.butAl1);
+        setTimeBut[1] = v.findViewById(R.id.butAl2);
+        setTimeBut[2] = v.findViewById(R.id.butAl3);
+        setTimeBut[3] = v.findViewById(R.id.butAl4);
+        setTimeBut[4] = v.findViewById(R.id.butAl5);
+        setTimeBut[5] = v.findViewById(R.id.butAl6);
+        setTimeBut[6] = v.findViewById(R.id.butAl7);
         stateAl[0] = v.findViewById(R.id.swAl1);
         stateAl[1] = v.findViewById(R.id.swAl2);
         stateAl[2] = v.findViewById(R.id.swAl3);
         stateAl[3] = v.findViewById(R.id.swAl4);
         stateAl[4] = v.findViewById(R.id.swAl5);
-        for (int i = 0; i < 5; i++) {
+        stateAl[5] = v.findViewById(R.id.swAl6);
+        stateAl[6] = v.findViewById(R.id.swAl7);
+        for (int i = 0; i < 7; i++) {
             setTimeBut[i].setText(alarmListener.getTime(i));
             stateAl[i].setChecked(alarmListener.getState(i));
             final int finalI = i;
