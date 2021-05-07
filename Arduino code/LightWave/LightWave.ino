@@ -1,6 +1,4 @@
 //----------------------НАСТРОЙКИ-----------------------
-#define ORDER_RGB       // порядок цветов ORDER_GRB / ORDER_RGB / ORDER_BRG
-
 #define COLOR_DEBTH 2
 #define maxArrSize 28
 #define kolArrMenu 3
@@ -23,8 +21,8 @@
 #define ledPin 3
 
 // Дисплей TM1637
-#define CLK_tm 12
-#define DIO 11
+#define CLK_tm 7
+#define DIO 6
 
 // Адрес DS3231
 #define clock_adr 0x68
@@ -34,7 +32,7 @@
 #define hc_RX 5
 
 // SD - порт
-#define sd_pin 9
+#define sd_pin 10
 //---------------------КОНЕЦ-ПИНОВ---------------------
 
 //---------------------БИБЛИОТЕКИ-----------------------
@@ -64,8 +62,7 @@ struct LedPreset {
 };
 //-------------------КОНЕЦ-СТРУКТУР---------------------
 
-LEDdata leds[NUMPIXELS];  // буфер ленты типа LEDdata (размер зависит от COLOR_DEBTH)
-microLED pixels(leds, NUMPIXELS, ledPin);
+microLED<NUMPIXELS, ledPin, -1, LED_WS2812, ORDER_RGB> pixels;
 RTC_DS3231 rtc;
 GyverTM1637 disp(CLK_tm, DIO);
 GButton but(butPin);
@@ -99,7 +96,6 @@ void setup() {
   pixels.setBrightness(ledBrightness);    // яркость (0-255)
   // яркость применяется при выводе .show() !
   pixels.setMaxCurrent(1600);
-  pixels.setVoltage(5000);
   pixels.clear();   // очищает буфер
   // применяется при выводе .show() !
   pixels.show();
