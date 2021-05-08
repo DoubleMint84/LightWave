@@ -8,7 +8,6 @@
 #define PARSE_AMOUNT 6
 #define NUMPIXELS 15
 #define dawnTime 2 //в минутах
-#define ledBrightness 255
 
 #define DEBUG 0 // 1 - дебаг в сериал-порт
 //-------------------КОНЕЦ-НАСТРОЕК---------------------
@@ -44,6 +43,7 @@
 #include <SD.h>
 #include <microLED.h>
 #include <SoftwareSerial.h>
+#include "GyverTimer.h" 
 //------------------КОНЕЦ-БИБЛИОТЕК---------------------
 
 //---------------------СТРУКТУРЫ------------------------
@@ -54,12 +54,6 @@ struct oneAlarm {
   int8_t dawnMin;
   bool isActive;
 };
-
-struct LedPreset {
-  byte r;
-  byte g;
-  byte b;
-};
 //-------------------КОНЕЦ-СТРУКТУР---------------------
 
 microLED<NUMPIXELS, ledPin, -1, LED_WS2812, ORDER_RGB> pixels;
@@ -67,22 +61,26 @@ RTC_DS3231 rtc;
 GyverTM1637 disp(CLK_tm, DIO);
 GButton but(butPin);
 SoftwareSerial blueTooth(hc_TX, hc_RX);
-
-const long dawnStep = (long(dawnTime) * long(60000)) / 750;
-unsigned long lightTime = 0;
-int ledR = 0, ledG = 0, ledB = 0;
-int value = 0, change = 0, alarmRaise = -1;
-int intData[PARSE_AMOUNT];
-byte level = 0, change_time = 0;
-bool inMenu = false, dots = true, ledActive = false;
 DateTime t_now, t_prev;
 oneAlarm alarms[al_kol];
-LedPreset ledPreset;
-boolean recievedFlag = false, lamp = false;
-boolean getStarted = false, blinkBuzz = false;
+GTimer effectTimer(MS, 30); // таймер прорисовки эффектов
+
+const long dawnStep = (long(dawnTime) * long(60000)) / 750;
+int ledR = 0, ledG = 0, ledB = 0;
+bool ledActive = false;
+
+int alarmRaise = -1;
+
+byte change_time = 0;
+
+int intData[PARSE_AMOUNT];
 byte index;
 String string_convert = "";
-unsigned long timerAlarm;
+boolean recievedFlag = false, getStarted = false;
+
+bool is_breath = false;
+int ledEffect = -1;
+int ledBrightness = 255;
 
 void setup() {
 #if (DEBUG == 1)
@@ -138,6 +136,7 @@ void setup() {
 #if (DEBUG == 1)
   Serial.print("Initialization done. All systems clear.");
 #endif
+  effectTimer.start();
 }
 
 void loop() {
@@ -146,6 +145,7 @@ void loop() {
   t_now = rtc.now();
   alarmTick();
   dawnTick();
+  effectTick();
   if ((t_now.minute() != t_prev.minute()) and (change_time == 0)) {
     disp.displayClock(byte(t_now.hour()), byte(t_now.minute()));
     t_prev = t_now;

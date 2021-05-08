@@ -60,6 +60,21 @@ void command_parse() {
             pixels.fill(mRGB(intData[3], intData[2], intData[4])); // заливаем жёлтым
             pixels.show();
             break;
+          case 2:
+            switch (intData[2]) {
+              case 0:
+                ledBrightness = intData[3];
+                pixels.setBrightness(intData[3]);
+                pixels.show();
+                break;
+              case 1:
+                is_breath = intData[3];
+                break;
+            }
+            break;
+          case 3:
+            ledEffect = intData[2];
+            break;
         }
         break;
     }

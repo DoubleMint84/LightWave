@@ -25,16 +25,6 @@ void dataSdRead() {
       }
 #endif
     }
-    ledPreset.r = byte(myFile.parseInt());
-    ledPreset.g = byte(myFile.parseInt());
-    ledPreset.b = byte(myFile.parseInt());
-#if (DEBUG == 1)
-    Serial.print(ledPreset.r);
-    Serial.print(" ");
-    Serial.print(ledPreset.g);
-    Serial.print(' ');
-    Serial.println(ledPreset.b);
-#endif
     myFile.close();
   } else {
 #if (DEBUG == 1)
@@ -81,11 +71,6 @@ void writeAlarmToSd(byte event) {
         myFile.println("0");
       }
     }
-    myFile.print(ledPreset.r);
-    myFile.print(' ');
-    myFile.print(ledPreset.g);
-    myFile.print(' ');
-    myFile.println(ledPreset.b);
     myFile.close();
   }
 }
