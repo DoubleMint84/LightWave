@@ -25,6 +25,7 @@ void dataSdRead() {
       }
 #endif
     }
+    dawnTime = myFile.parseInt();
     myFile.close();
   } else {
 #if (DEBUG == 1)
@@ -71,6 +72,7 @@ void writeAlarmToSd(byte event) {
         myFile.println("0");
       }
     }
+    myFile.println(dawnTime);
     myFile.close();
   }
 }

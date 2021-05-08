@@ -6,8 +6,8 @@
 #define clock_adr 0x68
 #define al_kol 7 // количество будильников - по дням недели
 #define PARSE_AMOUNT 6
-#define NUMPIXELS 15
-#define dawnTime 2 //в минутах
+#define NUMPIXELS 60
+#define dawn_Time 2 //в минутах
 
 #define DEBUG 0 // 1 - дебаг в сериал-порт
 //-------------------КОНЕЦ-НАСТРОЕК---------------------
@@ -56,7 +56,7 @@ struct oneAlarm {
 };
 //-------------------КОНЕЦ-СТРУКТУР---------------------
 
-microLED<NUMPIXELS, ledPin, -1, LED_WS2812, ORDER_RGB> pixels;
+microLED<NUMPIXELS, ledPin, MLED_NO_CLOCK, LED_WS2812, ORDER_GRB, CLI_AVER> pixels;
 RTC_DS3231 rtc;
 GyverTM1637 disp(CLK_tm, DIO);
 GButton but(butPin);
@@ -65,6 +65,7 @@ DateTime t_now, t_prev;
 oneAlarm alarms[al_kol];
 GTimer effectTimer(MS, 30); // таймер прорисовки эффектов
 
+long dawnTime = dawn_Time;
 const long dawnStep = (long(dawnTime) * long(60000)) / 750;
 int ledR = 0, ledG = 0, ledB = 0;
 bool ledActive = false;

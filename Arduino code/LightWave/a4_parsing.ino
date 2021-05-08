@@ -12,7 +12,7 @@ void command_parse() {
 #endif
     switch (intData[0]) {
       case 0:
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < al_kol; i++) {
           blueTooth.print("1 3 ");
           blueTooth.print(i);
           blueTooth.print(' ');
@@ -54,6 +54,7 @@ void command_parse() {
           case 0:
             pixels.clear();   // очищает буфер
             // применяется при выводе .show() !
+            ledEffect = -1;
             pixels.show();
             break;
           case 1:
