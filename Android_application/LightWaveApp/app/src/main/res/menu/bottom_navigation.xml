@@ -4,26 +4,21 @@
     <item
         android:id="@+id/nav_connection"
         android:icon="@drawable/ic_bluetooth_black_24dp"
-        android:title="Connect" />
+        android:title="@string/connect" />
 
     <item
         android:id="@+id/nav_alarms"
         android:icon="@drawable/ic_access_alarms_black_24dp"
-        android:title="Alarms" />
+        android:title="@string/alarms" />
 
     <item
         android:id="@+id/nav_lamp"
-        android:icon="@drawable/ic_wb_incandescent_black_24dp"
-        android:title="Led" />
-
-    <item
-        android:id="@+id/nav_device_settings"
-        android:icon="@drawable/ic_menu_black_24dp"
-        android:title="Device menu" />
+        android:icon="@drawable/ic_action_garland"
+        android:title="@string/light_control" />
 
     <item
         android:id="@+id/nav_app_settings"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:title="Settings" />
+        android:title="@string/settings" />
 
 </menu>

@@ -12,4 +12,16 @@
     <string name="text_alarms">Alarms</string>
     <string name="text_dawn_time">Dawn time</string>
     <string name="zero_min">0 min</string>
+    <string name="led_off">Led off</string>
+    <string name="update">Update</string>
+    <string name="lamp_control">Lamp control</string>
+    <string name="connect">Connect</string>
+    <string name="alarms">Alarms</string>
+    <string name="led">Led</string>
+    <string name="effects">Effects</string>
+    <string name="settings">Settings</string>
+    <string name="breath_mode">Breath mode</string>
+    <string name="light_control">Light control</string>
+    <string name="speed">Speed</string>
+    <string name="param">Param</string>
 </resources>

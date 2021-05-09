@@ -17,14 +17,16 @@ import androidx.fragment.app.Fragment;
 public class AlarmsFragment extends Fragment {
     private final Button[] setTimeBut = new Button[7];
     private final SwitchCompat[] stateAl = new SwitchCompat[7];
-
+    private Button dawnTimeBut;
 
 
     public interface onAlarmListener {
         public String getTime(int num);
         public boolean getState(int num);
+        public String getDawnTime();
         public void changeTime(int num);
         public void changeState(int num);
+        public void changeDawnTime();
     }
     onAlarmListener alarmListener;
 
@@ -57,6 +59,7 @@ public class AlarmsFragment extends Fragment {
         stateAl[4] = v.findViewById(R.id.swAl5);
         stateAl[5] = v.findViewById(R.id.swAl6);
         stateAl[6] = v.findViewById(R.id.swAl7);
+        dawnTimeBut = v.findViewById(R.id.butDawnTime);
         for (int i = 0; i < 7; i++) {
             setTimeBut[i].setText(alarmListener.getTime(i));
             stateAl[i].setChecked(alarmListener.getState(i));
@@ -75,6 +78,13 @@ public class AlarmsFragment extends Fragment {
                 }
             });
         }
+        dawnTimeBut.setText(alarmListener.getDawnTime());
+        dawnTimeBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alarmListener.changeDawnTime();
+            }
+        });
         return v;
     }
 }

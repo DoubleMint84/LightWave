@@ -2,6 +2,7 @@ package com.m1nt.lightwave;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -11,12 +12,14 @@ import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,7 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity implements ConnectFragment.onSomeEventListener, LampFragment.onLampListener, AlarmsFragment.onAlarmListener {
+public class MainActivity extends AppCompatActivity implements ConnectFragment.onSomeEventListener, LightFragment.onLampListener, AlarmsFragment.onAlarmListener {
 
     public static BluetoothAdapter bluetoothAdapter;
     public static ThreadConnectBTdevice myThreadConnectBTDevice;
@@ -40,8 +43,9 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     public int currentAl = 0;
     private static final String TAG = "myLogs";
 
-
     public AlarmRecord[] alarmRecord = new AlarmRecord[7];
+    public int dawnTime = 30;
+    public boolean breathMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,14 +114,11 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
                     selectedFragment = new AlarmsFragment();
                     break;
                 case R.id.nav_lamp:
-                    selectedFragment = new LampFragment();
-                    break;
-                case R.id.nav_device_settings:
-                    selectedFragment = new DeviceSettingsFragment();
+                    selectedFragment = new LightFragment();
                     break;
                 case R.id.nav_app_settings:
-                    selectedFragment = new AppSettingsFragment();
-                    break;
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AppSettingsFragment()).commit();
+                    return true;
             }
 
             assert selectedFragment != null;
@@ -141,10 +142,50 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     }
 
     @Override
+    public void changeBrightness(int bright) {
+        if (myThreadConnected != null) {
+            byte[] bytesToSend = ("$2 2 0 " + String.valueOf(bright) + ";").getBytes();
+            myThreadConnected.write(bytesToSend );
+        }
+    }
+
+    @Override
     public void offLed() {
         if (myThreadConnected != null) {
             byte[] bytesToSend = ("$2 0;").getBytes();
             myThreadConnected.write(bytesToSend );
+        }
+    }
+
+    @Override
+    public void changeBreathModeState(boolean state) {
+        if (myThreadConnected != null) {
+            byte[] bytesToSend = ("$2 2 1 " + (state ? "1" : "0") + ";").getBytes();
+            myThreadConnected.write(bytesToSend);
+        }
+    }
+
+    @Override
+    public void changeEffect(int num) {
+        if (myThreadConnected != null) {
+            byte[] bytesToSend = ("$2 3 " + num + ";").getBytes();
+            myThreadConnected.write(bytesToSend);
+        }
+    }
+
+    @Override
+    public void changeParam(int param) {
+        if (myThreadConnected != null) {
+            byte[] bytesToSend = ("$2 5 " + param + ";").getBytes();
+            myThreadConnected.write(bytesToSend);
+        }
+    }
+
+    @Override
+    public void changeSpeed(int speed) {
+        if (myThreadConnected != null) {
+            byte[] bytesToSend = ("$2 4 " + speed + ";").getBytes();
+            myThreadConnected.write(bytesToSend);
         }
     }
 
@@ -161,6 +202,54 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     @Override
     public boolean getState(int num) {
         return alarmRecord[num].state;
+    }
+
+    @Override
+    public String getDawnTime() {
+        return dawnTime + " MIN";
+    }
+
+    @Override
+    public void changeDawnTime() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Change dawn time");
+        alert.setMessage("Input dawn time in minutes");
+
+// Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString();
+                try {
+                    int timeMin = Integer.parseInt(value);
+                    if (timeMin <= 0) {
+                        Toast.makeText(MainActivity.this, "Please, type a non zero number", Toast.LENGTH_SHORT).show();
+                    } else {
+                        dawnTime = timeMin;
+                        Button tmp = findViewById(R.id.butDawnTime);
+                        tmp.setText(dawnTime + " MIN");
+                        if (myThreadConnected != null) {
+                            byte[] bytesToSend = ("$1 4 " + dawnTime + ";").getBytes();
+                            myThreadConnected.write(bytesToSend);
+                        }
+                    }
+                } catch(NumberFormatException nfe) {
+                    Toast.makeText(MainActivity.this, "Please, type a number", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
     }
 
     @Override
@@ -305,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     private class ThreadConnected extends Thread {    // Поток - приём и отправка данных
         private final InputStream connectedInputStream;
         private final OutputStream connectedOutputStream;
-        private String sbprint;
+
         public ThreadConnected(BluetoothSocket socket) {
             InputStream in = null;
             OutputStream out = null;
@@ -324,50 +413,6 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         public void run() { // Приём данных
             while (true) {
                 try {
-                    /*byte[] buffer = new byte[1];
-                    int bytes = connectedInputStream.read(buffer);
-                    String strIncom = new String(buffer, 0, bytes);
-                    sb.append(strIncom); // собираем символы в строку
-                    int endOfLineIndex = sb.indexOf("\r\n"); // определяем конец строки
-                    if (endOfLineIndex > 0) {
-                        sbprint = sb.substring(0, endOfLineIndex);
-                        sb.delete(0, sb.length());
-                        runOnUiThread(new Runnable() { // Вывод данных
-
-                            @Override
-                            public void run() {
-                                switch (sbprint) {
-
-                                    case "D10 ON":
-
-                                    case "D12 OFF":
-
-                                    case "D12 ON":
-
-                                    case "D10 OFF":
-
-                                    case "D11 ON":
-                                        Toast.makeText(MainActivity.this, sbprint, Toast.LENGTH_SHORT).show();
-                                        break;
-
-                                    case "D11 OFF":
-                                        Toast.makeText(MainActivity.this, sbprint, Toast.LENGTH_SHORT).show();
-                                        break;
-
-                                    case "D13 ON":
-                                        Toast.makeText(MainActivity.this, sbprint, Toast.LENGTH_SHORT).show();
-                                        break;
-
-                                    case "D13 OFF":
-                                        Toast.makeText(MainActivity.this, sbprint, Toast.LENGTH_SHORT).show();
-                                        break;
-
-                                    default:
-                                        break;
-                                }
-                            }
-                        });
-                    }*/
                     byte[] buffer = new byte[1];
                     int bytes = connectedInputStream.read(buffer);
                     String strIncom = new String(buffer, 0, bytes);
@@ -376,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
                     if (endOfLineIndex > 0) {
 
                         Log.d(TAG, "DATA DETECTED");
-                        sbprint = sb.substring(0, endOfLineIndex);
+                        String sbprint = sb.substring(0, endOfLineIndex);
                         sb.delete(0, sb.length());
                         //Toast.makeText(MainActivity.this, sbprint, Toast.LENGTH_SHORT).show();
                         String[] strMas= sbprint.split(" ");
@@ -395,6 +440,9 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
                                             alarmRecord[param[2]].state = false;
                                         }
 
+                                        break;
+                                    case 4:
+                                        dawnTime = param[2];
                                         break;
                                 }
                                 break;
