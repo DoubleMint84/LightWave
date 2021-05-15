@@ -13,7 +13,25 @@ void effectTick() {
         pixels.clear();
         break;
       case 0:
-        rainbow();
+        randomMode();
+        break;
+      case 1:
+        rainbow(ledParameter);
+        break;
+      case 2:
+        colorCycle();
+        break;
+      case 3:
+        runningDots(ledParameter);
+        break;
+      case 4:
+        twinkleRandom(ledParameter);
+        break;
+      case 5:
+        strobe();
+        break;
+      case 6:
+        scanner(ledParameter, 4);
         break;
     }
     if (is_breath) {

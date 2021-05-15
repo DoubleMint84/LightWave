@@ -63,7 +63,7 @@ GButton but(butPin);
 SoftwareSerial blueTooth(hc_TX, hc_RX);
 DateTime t_now, t_prev;
 oneAlarm alarms[al_kol];
-GTimer effectTimer(MS, 30); // таймер прорисовки эффектов
+GTimer effectTimer(MS, 30), dotsTimer(MS, 100), randomTimer(MS, 15000); // таймер прорисовки эффектов
 
 long dawnTime = dawn_Time;
 const long dawnStep = (long(dawnTime) * long(60000)) / 750;
@@ -82,6 +82,7 @@ boolean recievedFlag = false, getStarted = false;
 bool is_breath = false;
 int ledEffect = -1;
 int ledBrightness = 255;
+byte ledParameter = 0;
 
 void setup() {
 #if (DEBUG == 1)
@@ -138,6 +139,9 @@ void setup() {
   Serial.print("Initialization done. All systems clear.");
 #endif
   effectTimer.start();
+  dotsTimer.start();
+  randomTimer.start();
+  randomSeed(A0);
 }
 
 void loop() {

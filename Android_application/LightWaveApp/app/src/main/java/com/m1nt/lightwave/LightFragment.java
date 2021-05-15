@@ -34,7 +34,7 @@ public class LightFragment extends Fragment {
         public void changeSpeed(int speed);
         public void changeParam(int param);
     }
-    public String[] effects = { "Random", "Rainbow" };
+    public String[] effects = { "Random", "Rainbow", "Color Cycle", "Running dots", "Twinkle", "Strobe", "Scanner" };
     public int pick = 0, curSpeed = 50, curParam = 50;
     onLampListener lampListener;
     private SwitchCompat breathSwitch;

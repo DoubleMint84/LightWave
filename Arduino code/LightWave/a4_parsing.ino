@@ -76,6 +76,12 @@ void command_parse() {
           case 3:
             ledEffect = intData[2];
             break;
+          case 4:
+            effectTimer.setInterval(map(intData[2], 0, 255, 200, 10));
+            break;
+          case 5:
+            ledParameter = intData[2];
+            break;
         }
         break;
     }
