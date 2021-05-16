@@ -5,7 +5,7 @@ void command_parse() {
     recievedFlag = false;
 #if (DEBUG == 1)
     for (int i = 0; i < index; i++) {
-      Serial.print(intData[i]); Serial.print(" ");
+      Serial.print(intData[i]); Serial.print(F(" "));
 
     } 
     Serial.println();
@@ -13,7 +13,7 @@ void command_parse() {
     switch (intData[0]) {
       case 0:
         for (int i = 0; i < al_kol; i++) {
-          blueTooth.print("1 3 ");
+          blueTooth.print(F("1 3 "));
           blueTooth.print(i);
           blueTooth.print(' ');
           blueTooth.print(alarms[i].hour);
@@ -22,6 +22,8 @@ void command_parse() {
           blueTooth.print(' ');
           blueTooth.println(alarms[i].isActive ? "1" : "0");
         }
+        blueTooth.print("1 4 ");
+        blueTooth.println(dawnTime);
         break;
 
       case 1:
@@ -58,7 +60,7 @@ void command_parse() {
             pixels.show();
             break;
           case 1:
-            pixels.fill(mRGB(intData[3], intData[2], intData[4])); // заливаем жёлтым
+            pixels.fill(mRGB(intData[3], intData[2], intData[4])); 
             pixels.show();
             break;
           case 2:
@@ -82,6 +84,9 @@ void command_parse() {
           case 5:
             ledParameter = intData[2];
             break;
+          case 6:
+            ledEffect = -2;
+            break;
         }
         break;
     }
@@ -103,7 +108,7 @@ void parsing() {
     }
     if (incomingByte == '$') {                // если это $
 #if (DEBUG == 1)
-      Serial.println("Data detected");
+      Serial.println(F("Data detected"));
 #endif
       getStarted = true;                      // поднимаем флаг, что можно парсить
       index = 0;                              // сбрасываем индекс

@@ -31,7 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity implements ConnectFragment.onSomeEventListener, LightFragment.onLampListener, AlarmsFragment.onAlarmListener {
+public class MainActivity extends AppCompatActivity implements ConnectFragment.onSomeEventListener, LightFragment.onLampListener, AlarmsFragment.onAlarmListener, AppSettingsFragment.onSettingsListener {
 
     public static BluetoothAdapter bluetoothAdapter;
     public static ThreadConnectBTdevice myThreadConnectBTDevice;
@@ -46,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     public AlarmRecord[] alarmRecord = new AlarmRecord[7];
     public int dawnTime = 30;
     public boolean breathMode = false;
+
+    private ConnectFragment connectFragment = new ConnectFragment();
+    private AlarmsFragment alarmsFragment = new AlarmsFragment();
+    private LightFragment lightFragment = new LightFragment();
+    private AppSettingsFragment appSettingsFragment = new AppSettingsFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,17 +113,17 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
 
             switch (item.getItemId()) {
                 case R.id.nav_connection:
-                    selectedFragment = new ConnectFragment();
+                    selectedFragment = connectFragment;
                     break;
                 case R.id.nav_alarms:
-                    selectedFragment = new AlarmsFragment();
+                    selectedFragment = alarmsFragment;
                     break;
                 case R.id.nav_lamp:
-                    selectedFragment = new LightFragment();
+                    selectedFragment = lightFragment;
                     break;
                 case R.id.nav_app_settings:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AppSettingsFragment()).commit();
-                    return true;
+                    selectedFragment = appSettingsFragment;
+                    break;
             }
 
             assert selectedFragment != null;
@@ -210,6 +215,29 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     }
 
     @Override
+    public void showAuthors() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("LightWave Project");
+        alert.setMessage("Authors:\n" +
+                "Nikita Borodavko\n" +
+                "Karim Gataullin\n" +
+                "Anton Prosvirkin\n" +
+                "Moscow, 2021\n"
+        );
+        alert.setPositiveButton("Donate", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+        alert.show();
+    }
+
+    @Override
     public void changeDawnTime() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -267,8 +295,6 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         if (myThreadConnected != null) {
             byte[] bytesToSend = ("$1 2 " + num + " " + (alarmRecord[num].state ? 1 : 0) + ";").getBytes();
             myThreadConnected.write(bytesToSend );
-
-
         }
 
     }
@@ -318,6 +344,15 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
 
         }
     };
+
+    @Override
+    public void sendCommand(String command) {
+        if (myThreadConnected != null) {
+            byte[] bytesToSend = ("$" + command + ";").getBytes();
+            myThreadConnected.write(bytesToSend );
+        }
+        Toast.makeText(MainActivity.this, "Command has been sent", Toast.LENGTH_SHORT).show();
+    }
 
     public class ThreadConnectBTdevice extends Thread { // Поток для коннекта с Bluetooth
         private BluetoothSocket bluetoothSocket = null;

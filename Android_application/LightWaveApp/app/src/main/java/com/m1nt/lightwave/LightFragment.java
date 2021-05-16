@@ -3,6 +3,7 @@ package com.m1nt.lightwave;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.rtugeek.android.colorseekbar.ColorSeekBar;
 
 
 public class LightFragment extends Fragment {
+    private static final String TAG = "Light frag";
     public interface onLampListener {
         public void changeColor(int red, int green, int blue);
         public void changeBrightness(int bright);
@@ -34,7 +36,7 @@ public class LightFragment extends Fragment {
         public void changeSpeed(int speed);
         public void changeParam(int param);
     }
-    public String[] effects = { "Random", "Rainbow", "Color Cycle", "Running dots", "Twinkle", "Strobe", "Scanner" };
+    public String[] effects = { "Nope", "Random", "Rainbow", "Color Cycle", "Running dots", "Twinkle", "Strobe", "Scanner", "Running lights", "Theatre chase" };
     public int pick = 0, curSpeed = 50, curParam = 50;
     onLampListener lampListener;
     private SwitchCompat breathSwitch;
@@ -53,6 +55,7 @@ public class LightFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_light, container, false);
+        Log.d(TAG, "START LIGHT FRAGMENT");
         final TextView textView = v.findViewById(R.id.textLamp);
         SeekBar seekBarBright = v.findViewById(R.id.seekBarBright);
         SeekBar seekBarSpeed = v.findViewById(R.id.seekBarSpeed);
@@ -60,11 +63,20 @@ public class LightFragment extends Fragment {
         TextView editTextBright = v.findViewById(R.id.textBright);
         ColorSeekBar colorSeekBar = v.findViewById(R.id.colorLamp);
         Button butOff = v.findViewById(R.id.butLedOff);
+        Button butLamp = v.findViewById(R.id.butLamp);
         breathSwitch = v.findViewById(R.id.breathBtn);
         butOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 lampListener.offLed();
+            }
+        });
+        butLamp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lampListener.changeEffect(-2);
+                lampListener.changeSpeed(curSpeed);
+                lampListener.changeParam(curParam);
             }
         });
         colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
@@ -143,13 +155,14 @@ public class LightFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Применяем адаптер к элементу spinner
         spinner.setAdapter(adapter);
-
         AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                Log.d(TAG, "SELECTED " + position);
                 // Получаем выбранный объект
-                pick = position;
+                pick = position - 1;
                 lampListener.changeEffect(pick);
                 lampListener.changeSpeed(curSpeed);
                 lampListener.changeParam(curParam);
@@ -159,6 +172,7 @@ public class LightFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         };
+        spinner.setOnItemSelectedListener(itemSelectedListener);
         return v;
     }
 }

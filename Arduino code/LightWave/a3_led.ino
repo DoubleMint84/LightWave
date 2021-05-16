@@ -9,6 +9,10 @@ void ledSetColor (byte r, byte g, byte b) {
 void effectTick() {
   if (effectTimer.isReady() and !ledActive) {
     switch (ledEffect) {
+      case -2:
+        kelvinTemp = map(ledParameter, 0, 255, 900, 6600);
+        pixels.fill(mKelvin(kelvinTemp));
+        break;
       case -1:
         pixels.clear();
         break;
@@ -33,13 +37,21 @@ void effectTick() {
       case 6:
         scanner(ledParameter, 4);
         break;
+      case 7:
+        runningLights(ledParameter);
+        break;
+      case 8:
+        theatreChase(ledParameter);
+        break;
     }
+    pixels.show();
+  }
+  if (breathTimer.isReady() and !ledActive) {
     if (is_breath) {
       breathing();
     } else {
       pixels.setBrightness(ledBrightness);
     }
-    pixels.show();
   }
 }
 /*

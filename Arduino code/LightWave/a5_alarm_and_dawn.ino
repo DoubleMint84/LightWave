@@ -12,9 +12,10 @@ void alarmTick() {
     }
   }
   if (alarmRaise != -1) {
-    if (millis() - timerAlarm >= 300000){ // если через 5 минут не была нажата кнопка, то выключаем ленту
+    if (millis() - timerAlarm >= 300000) { // если через 5 минут не была нажата кнопка, то выключаем ленту
       alarmRaise = -1;
-      ledSetColor(0, 0, 0);
+      pixels.fill(mBlack);
+      pixels.setBrightness(ledBrightness);
       ledActive = false;
     }
   }
@@ -40,6 +41,8 @@ void dawnTick() {
       if ((alarms[i].dawnHour == t_now.hour()) and (alarms[i].dawnMin == t_now.minute()) and (t_now.second() == 0) and alarms[i].isActive) {
         ledActive = true;
         lightTime = millis();
+        dawnTemp = 900;
+        brightTemp = 0;
 #if (DEBUG == 1)
         Serial.print(i);
         Serial.println(F(" alarm: starting dawn "));
@@ -49,50 +52,15 @@ void dawnTick() {
     }
   }
   if (ledActive) {
-    if (ledR == 0 && ledG < 255) {
-      if (millis() - lightTime > dawnStep) {
-#if (DEBUG == 1)
-        Serial.print(ledR);
-        Serial.print(' ');
-        Serial.println(ledG);
-#endif
-        //fillColor(pixels.Color(ledR, ledG, 0));
-        pixels.fill(mRGB(ledR, ledG, 0)); // заливаем жёлтым
-        pixels.show();
-        ledG++;
-        lightTime = millis();
+    if (millis() - lightTime > dawnStep) {
+      brightTemp++;
+      if (brightTemp <= 255) {
+        pixels.setBrightness(brightTemp);
       }
-    }
-    // плавно добавляем Красный
-    if (ledR < 255 && ledG == 255) {
-      if (millis() - lightTime > dawnStep) {
-#if (DEBUG == 1)
-        Serial.print(ledR);
-        Serial.print(' ');
-        Serial.println(ledG);
-#endif
-        pixels.fill(mRGB(ledR, ledG, 0)); // заливаем жёлтым
-        pixels.show();
-        ledR++;
-        lightTime = millis();
-      }
-    }
-    // плавно гасим Зеленый
-    if (ledR == 255) {
-      if (millis() - lightTime > dawnStep) {
-
-        if (ledG != 0) {
-#if (DEBUG == 1)
-          Serial.print(ledR);
-          Serial.print(' ');
-          Serial.println(ledG);
-#endif
-          pixels.fill(mRGB(ledR, ledG, 0)); // заливаем жёлтым
-          pixels.show();
-          ledG--;
-        }
-        lightTime = millis();
-      }
+      pixels.fill(mKelvin(dawnTemp));
+      pixels.show();
+      dawnTemp++;
+      lightTime = millis();
     }
   }
 }

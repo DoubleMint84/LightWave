@@ -24,4 +24,9 @@
     <string name="light_control">Light control</string>
     <string name="speed">Speed</string>
     <string name="param">Param</string>
+    <string name="send">Send</string>
+    <string name="type_command">Type command</string>
+    <string name="github">Github</string>
+    <string name="authors">Authors</string>
+    <string name="sync_time">Sync time</string>
 </resources>

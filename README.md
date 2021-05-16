@@ -16,6 +16,7 @@ Multifunctional color garland that can be controlled from a smartphone.
 - $2 3 \<effect\>; - выбор эффекта
 - $2 4 \<speed\>; - установка скорости эффекта
 - $2 5 \<param\>; - установка параметра для эффекта
+- $2 6; - включение света лампы(цветовая температура) - 0:255
 
 ### Перечень эффектов
 - 0 - смена режимов
@@ -25,3 +26,5 @@ Multifunctional color garland that can be controlled from a smartphone.
 - 4 - случайные точки
 - 5 - стробоскоп
 - 6 - сканнер из будущего
+- 7 - бегущие огни
+- 8 - театральные лампочки

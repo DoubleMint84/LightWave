@@ -2,18 +2,20 @@ void randomMode() {
   static int nowMode = 0;
   static byte nowParam = 100;
   switch (nowMode) {
-      case 0: randomMode(); break;
-      case 1: rainbow(nowParam); break;
-      case 2: colorCycle(); break;
-      case 3: runningDots(nowParam); break;
-      case 4: twinkleRandom(nowParam); break;
-      case 5: strobe(); break;
-      case 6: scanner(nowParam, 4); break;
+    case 0:rainbow(nowParam); break;
+    case 1: rainbow(nowParam); break;
+    case 2: colorCycle(); break;
+    case 3: runningDots(nowParam); break;
+    case 4: twinkleRandom(nowParam); break;
+    case 5: strobe(); break;
+    case 6: scanner(nowParam, 4); break;
+    case 7: runningLights(nowParam); break;
+    case 8: theatreChase(nowParam); break;
   }
   if (randomTimer.isReady()) {
-    nowMode = random(6);
+    nowMode = random(8);
     nowParam = random(255);
-    randomTimer.setInterval(random(30000));
+    randomTimer.setInterval(random(20000));
   }
 }
 
@@ -97,6 +99,31 @@ void scanner(byte param, int eyeSize) {
     } else {
       directionScan = false;
     }
+  }
+}
+
+void runningLights(byte param) {
+  static byte counter = 0;
+  if (counter < NUMPIXELS * 2) {
+    counter += 1;
+    for (int i = 0; i < NUMPIXELS; i++) {
+
+      pixels.set(i, mWheel8(param, (sin(i + counter) * 127 + 128)));
+    }
+  } else {
+    counter = 0;
+  }
+}
+void theatreChase(byte param) {
+  static byte counter = 0;
+  if (!dotsTimer.isReady()) return;
+  counter++;
+  if (counter > 3) {
+    counter = 0;
+  }
+  pixels.fill(mBlack);
+  for (int i = 0; i < NUMPIXELS; i = i + 3) {
+    pixels.set(i + counter, mWheel8(param));  //turn every third pixel on
   }
 }
 
