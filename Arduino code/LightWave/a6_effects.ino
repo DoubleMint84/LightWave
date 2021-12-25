@@ -7,13 +7,13 @@ void randomMode() {
     case 2: colorCycle(); break;
     case 3: runningDots(nowParam); break;
     case 4: twinkleRandom(nowParam); break;
-    case 5: strobe(); break;
-    case 6: scanner(nowParam, 4); break;
-    case 7: runningLights(nowParam); break;
-    case 8: theatreChase(nowParam); break;
+    //case 5: strobe(); break;
+    case 5: scanner(nowParam, 4); break;
+    case 6: runningLights(nowParam); break;
+    case 7: theatreChase(nowParam); break;
   }
   if (randomTimer.isReady()) {
-    nowMode = random(8);
+    nowMode = random(7);
     nowParam = random(255);
     randomTimer.setInterval(random(20000));
   }

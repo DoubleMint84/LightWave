@@ -221,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         alert.setMessage("Authors:\n" +
                 "Nikita Borodavko\n" +
                 "Karim Gataullin\n" +
-                "Anton Prosvirkin\n" +
                 "Moscow, 2021\n"
         );
         alert.setPositiveButton("Donate", new DialogInterface.OnClickListener() {
