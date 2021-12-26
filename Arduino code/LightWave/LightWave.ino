@@ -6,7 +6,7 @@
 #define clock_adr 0x68
 #define al_kol 7 // количество будильников - по дням недели
 #define PARSE_AMOUNT 6
-#define NUMPIXELS 60
+#define NUMPIXELS 110
 #define dawn_Time 2 //в минутах
 
 #define DEBUG 0 // 1 - дебаг в сериал-порт

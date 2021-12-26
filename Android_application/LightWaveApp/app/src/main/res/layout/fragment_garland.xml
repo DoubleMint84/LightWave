@@ -8,15 +8,6 @@
     android:gravity="center_horizontal"
     >
 
-    <TextView
-        android:id="@+id/textLamp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/lamp_control"
-        android:textSize="22sp"
-        android:visibility="visible" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,13 +23,10 @@
 
     </LinearLayout>
 
-    <com.rtugeek.android.colorseekbar.ColorSeekBar
+    <com.skydoves.colorpickerview.ColorPickerView
         android:id="@+id/colorLamp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:showAlphaBar="false"
-        app:barHeight="10dp"
-        />
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
 
     <Spinner
         android:id="@+id/spinnerEffects"

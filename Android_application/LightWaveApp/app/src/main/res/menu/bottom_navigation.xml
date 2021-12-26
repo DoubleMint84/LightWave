@@ -12,9 +12,14 @@
         android:title="@string/alarms" />
 
     <item
-        android:id="@+id/nav_lamp"
+        android:id="@+id/nav_lamp_control"
+        android:icon="@drawable/ic_wb_incandescent_black_24dp"
+        android:title="@string/lamp_control" />
+
+    <item
+        android:id="@+id/nav_garland"
         android:icon="@drawable/ic_action_garland"
-        android:title="@string/light_control" />
+        android:title="@string/garland" />
 
     <item
         android:id="@+id/nav_app_settings"

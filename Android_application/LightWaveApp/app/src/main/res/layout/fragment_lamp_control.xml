@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/led_off"
+            android:id="@+id/butLedOff"
+            android:layout_marginHorizontal="10dp"
+            tools:ignore="ButtonStyle" />
+
+    </LinearLayout>
+
+    <com.skydoves.colorpickerview.ColorPickerView
+        android:id="@+id/colorPickerLamp"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:minHeight="55dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/textBright"
+            android:layout_width="42dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:text="200"
+            android:textSize="20sp" />
+
+        <SeekBar
+            android:id="@+id/seekBarBright"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:max="255"
+            android:progress="200"
+            android:thumb="@drawable/ic_baseline_brightness_7_24" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/breathBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:text="@string/breath_mode"
+        android:textSize="20sp" />
+
+
+</LinearLayout>

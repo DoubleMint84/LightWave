@@ -1,6 +1,5 @@
 package com.m1nt.lightwave;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,13 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
-import com.rtugeek.android.colorseekbar.ColorSeekBar;
 
-
-
-public class LightFragment extends Fragment {
+public class GarlandFragment extends Fragment {
     private static final String TAG = "Light frag";
-    public interface onLampListener {
+    public interface onGarlandListener {
         public void changeColor(int red, int green, int blue);
         public void changeBrightness(int bright);
         public void offLed();
@@ -38,13 +33,13 @@ public class LightFragment extends Fragment {
     }
     public String[] effects = { "Nope", "Random", "Rainbow", "Color Cycle", "Running dots", "Twinkle", "Strobe", "Scanner", "Running lights", "Theatre chase" };
     public int pick = 0, curSpeed = 50, curParam = 50;
-    onLampListener lampListener;
+    onGarlandListener lampListener;
     private SwitchCompat breathSwitch;
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
         try {
-            lampListener = (onLampListener) activity;
+            lampListener = (onGarlandListener) activity;
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
@@ -54,14 +49,14 @@ public class LightFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_light, container, false);
+        View v = inflater.inflate(R.layout.fragment_garland, container, false);
         Log.d(TAG, "START LIGHT FRAGMENT");
-        final TextView textView = v.findViewById(R.id.textLamp);
+
         SeekBar seekBarBright = v.findViewById(R.id.seekBarBright);
         SeekBar seekBarSpeed = v.findViewById(R.id.seekBarSpeed);
         SeekBar seekBarParam = v.findViewById(R.id.seekBarParam);
         TextView editTextBright = v.findViewById(R.id.textBright);
-        ColorSeekBar colorSeekBar = v.findViewById(R.id.colorLamp);
+
         Button butOff = v.findViewById(R.id.butLedOff);
         Button butLamp = v.findViewById(R.id.butLamp);
         breathSwitch = v.findViewById(R.id.breathBtn);
@@ -79,7 +74,7 @@ public class LightFragment extends Fragment {
                 lampListener.changeParam(curParam);
             }
         });
-        colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
+        /*colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onColorChangeListener(int colorBarPosition, int alphaBarPosition, int color) {
@@ -90,7 +85,7 @@ public class LightFragment extends Fragment {
                 lampListener.changeColor(R, G, B);
                 textView.setText(String.valueOf(R) + ' ' + String.valueOf(G) + ' ' + String.valueOf(B));
             }
-        });
+        });*/
         breathSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

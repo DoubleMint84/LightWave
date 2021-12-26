@@ -2,10 +2,7 @@ package com.m1nt.lightwave;
 
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,17 +28,17 @@ public class ConnectFragment extends Fragment {
     ArrayList<String> pairedDeviceArrayList;
     ArrayAdapter pairedDeviceAdapter;
 
-    public interface onSomeEventListener {
+    public interface onConnectListener {
         public void someEvent(BluetoothDevice device);
     }
 
-    onSomeEventListener someEventListener;
+    onConnectListener someEventListener;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
         try {
-            someEventListener = (onSomeEventListener) activity;
+            someEventListener = (onConnectListener) activity;
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");

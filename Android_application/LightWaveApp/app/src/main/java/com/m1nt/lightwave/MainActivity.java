@@ -1,37 +1,37 @@
 package com.m1nt.lightwave;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity implements ConnectFragment.onSomeEventListener, LightFragment.onLampListener, AlarmsFragment.onAlarmListener, AppSettingsFragment.onSettingsListener {
+public class MainActivity extends AppCompatActivity implements ConnectFragment.onConnectListener, GarlandFragment.onGarlandListener, AlarmsFragment.onAlarmListener, AppSettingsFragment.onSettingsListener, LampControlFragment.onLampListener {
 
     public static BluetoothAdapter bluetoothAdapter;
     public static ThreadConnectBTdevice myThreadConnectBTDevice;
@@ -42,15 +42,19 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     private StringBuilder sb = new StringBuilder();
     public int currentAl = 0;
     private static final String TAG = "myLogs";
+    private static final String NOT_CONNECTED_COLOR = "#e53935";
+    private static final String CONNECTED_COLOR = "#00c853";
+    private static final String STANDBY_COLOR = "#ffa000";
 
     public AlarmRecord[] alarmRecord = new AlarmRecord[7];
     public int dawnTime = 30;
     public boolean breathMode = false;
 
-    private ConnectFragment connectFragment = new ConnectFragment();
-    private AlarmsFragment alarmsFragment = new AlarmsFragment();
-    private LightFragment lightFragment = new LightFragment();
-    private AppSettingsFragment appSettingsFragment = new AppSettingsFragment();
+    private final ConnectFragment connectFragment = new ConnectFragment();
+    private final AlarmsFragment alarmsFragment = new AlarmsFragment();
+    private final LampControlFragment lampControlFragment = new LampControlFragment();
+    private final GarlandFragment garlandFragment = new GarlandFragment();
+    private final AppSettingsFragment appSettingsFragment = new AppSettingsFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ConnectFragment()).commit();
+        changeActionBarColor(NOT_CONNECTED_COLOR);
+        changeActionBarCaption("Not connected");
     }
 
     @Override
@@ -105,31 +111,43 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         }
     }
 
-    private final BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @SuppressLint("NonConstantResourceId")
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
+    private void changeActionBarColor(int color) {
+        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(color));
+    }
 
-            switch (item.getItemId()) {
-                case R.id.nav_connection:
-                    selectedFragment = connectFragment;
-                    break;
-                case R.id.nav_alarms:
-                    selectedFragment = alarmsFragment;
-                    break;
-                case R.id.nav_lamp:
-                    selectedFragment = lightFragment;
-                    break;
-                case R.id.nav_app_settings:
-                    selectedFragment = appSettingsFragment;
-                    break;
-            }
+    private void changeActionBarColor(String color) {
+        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
+    }
 
-            assert selectedFragment != null;
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-            return true;
+    private void changeActionBarCaption(String caption) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle(caption);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
+        Fragment selectedFragment = null;
+
+        switch (item.getItemId()) {
+            case R.id.nav_connection:
+                selectedFragment = connectFragment;
+                break;
+            case R.id.nav_alarms:
+                selectedFragment = alarmsFragment;
+                break;
+            case R.id.nav_lamp_control:
+                selectedFragment = lampControlFragment;
+                break;
+            case R.id.nav_garland:
+                selectedFragment = garlandFragment;
+                break;
+            case R.id.nav_app_settings:
+                selectedFragment = appSettingsFragment;
+                break;
         }
+
+        assert selectedFragment != null;
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        return true;
     };
 
     @Override
@@ -141,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     @Override
     public void changeColor(int red, int green, int blue) {
         if (myThreadConnected != null) {
-            byte[] bytesToSend = ("$2 1 " + String.valueOf(red) + " " + String.valueOf(green) + " " + String.valueOf(blue) + ";").getBytes();
+            byte[] bytesToSend = ("$2 1 " + red + " " + green + " " + blue + ";").getBytes();
             myThreadConnected.write(bytesToSend );
         }
     }
@@ -149,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     @Override
     public void changeBrightness(int bright) {
         if (myThreadConnected != null) {
-            byte[] bytesToSend = ("$2 2 0 " + String.valueOf(bright) + ";").getBytes();
+            byte[] bytesToSend = ("$2 2 0 " + bright + ";").getBytes();
             myThreadConnected.write(bytesToSend );
         }
     }
@@ -197,9 +215,9 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
     @Override
     public String getTime(int num) {
         if (alarmRecord[num].min > 9) {
-            return Integer.toString(alarmRecord[num].hrs) + ":" + Integer.toString(alarmRecord[num].min);
+            return alarmRecord[num].hrs + ":" + alarmRecord[num].min;
         } else {
-            return Integer.toString(alarmRecord[num].hrs) + ":0" + Integer.toString(alarmRecord[num].min);
+            return alarmRecord[num].hrs + ":0" + alarmRecord[num].min;
         }
 
     }
@@ -223,19 +241,16 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
                 "Karim Gataullin\n" +
                 "Moscow, 2021\n"
         );
-        alert.setPositiveButton("Donate", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
+        alert.setPositiveButton("Donate", (dialog, whichButton) -> {
+            // Canceled.
         });
-        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
+        alert.setNegativeButton("Ok", (dialog, whichButton) -> {
+            // Canceled.
         });
         alert.show();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void changeDawnTime() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -247,33 +262,28 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         final EditText input = new EditText(this);
         alert.setView(input);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString();
-                try {
-                    int timeMin = Integer.parseInt(value);
-                    if (timeMin <= 0) {
-                        Toast.makeText(MainActivity.this, "Please, type a non zero number", Toast.LENGTH_SHORT).show();
-                    } else {
-                        dawnTime = timeMin;
-                        Button tmp = findViewById(R.id.butDawnTime);
-                        tmp.setText(dawnTime + " MIN");
-                        if (myThreadConnected != null) {
-                            byte[] bytesToSend = ("$1 4 " + dawnTime + ";").getBytes();
-                            myThreadConnected.write(bytesToSend);
-                        }
+        alert.setPositiveButton("Ok", (dialog, whichButton) -> {
+            String value = input.getText().toString();
+            try {
+                int timeMin = Integer.parseInt(value);
+                if (timeMin <= 0) {
+                    Toast.makeText(MainActivity.this, "Please, type a non zero number", Toast.LENGTH_SHORT).show();
+                } else {
+                    dawnTime = timeMin;
+                    Button tmp = findViewById(R.id.butDawnTime);
+                    tmp.setText(dawnTime + " MIN");
+                    if (myThreadConnected != null) {
+                        byte[] bytesToSend = ("$1 4 " + dawnTime + ";").getBytes();
+                        myThreadConnected.write(bytesToSend);
                     }
-                } catch(NumberFormatException nfe) {
-                    Toast.makeText(MainActivity.this, "Please, type a number", Toast.LENGTH_SHORT).show();
                 }
+            } catch(NumberFormatException nfe) {
+                Toast.makeText(MainActivity.this, "Please, type a number", Toast.LENGTH_SHORT).show();
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
+        alert.setNegativeButton("Cancel", (dialog, whichButton) -> {
+            // Canceled.
         });
 
         alert.show();
@@ -373,13 +383,11 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
             }
             catch (IOException e) {
                 e.printStackTrace();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Not connected, try again", Toast.LENGTH_LONG).show();
-                        Fragment conFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                        ((ListView) conFrag.getView().findViewById(R.id.listDevices)).setEnabled(true);
-                    }
+                runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), "Not connected, try again", Toast.LENGTH_LONG).show();
+                    Fragment conFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    assert conFrag != null;
+                    conFrag.requireView().findViewById(R.id.listDevices).setEnabled(true);
                 });
 
                 //ConnectFragment.listViewPairedDevice.setVisibility(View.VISIBLE);
@@ -391,13 +399,15 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
                 }
             }
             if(success) {  // Если законнектились, тогда открываем панель с кнопками и запускаем поток приёма и отправки данных
-                runOnUiThread(new Runnable() {
+                runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+                    //ButPanel.setVisibility(View.VISIBLE); // открываем панель с кнопками
+                });
+                runOnUiThread(() -> {
 
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
-                        //ButPanel.setVisibility(View.VISIBLE); // открываем панель с кнопками
-                    }
+                    changeActionBarColor(CONNECTED_COLOR);
+                    changeActionBarCaption("Connected");
+
                 });
 
                 myThreadConnected = new ThreadConnected(bluetoothSocket);
@@ -468,11 +478,7 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
                                     case 3:
                                         alarmRecord[param[2]].hrs = param[3];
                                         alarmRecord[param[2]].min = param[4];
-                                        if (param[5] == 1) {
-                                            alarmRecord[param[2]].state = true;
-                                        } else {
-                                            alarmRecord[param[2]].state = false;
-                                        }
+                                        alarmRecord[param[2]].state = param[5] == 1;
 
                                         break;
                                     case 4:
@@ -493,9 +499,11 @@ public class MainActivity extends AppCompatActivity implements ConnectFragment.o
         public void write(byte[] buffer) {
             try {
                 connectedOutputStream.write(buffer);
+                Log.d(TAG, Arrays.toString(buffer));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
 
     }
