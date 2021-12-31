@@ -43,6 +43,15 @@ void effectTick() {
       case 8:
         theatreChase(ledParameter);
         break;
+      case 9:
+        xmasLights(ledParameter);
+        break;
+      case 10:
+        confetti_pal(ledParameter);
+        break;
+      case 11:
+        xmasLightsFade(ledParameter);
+        break;
     }
     pixels.show();
   }

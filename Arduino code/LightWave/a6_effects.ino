@@ -11,9 +11,12 @@ void randomMode() {
     case 5: scanner(nowParam, 4); break;
     case 6: runningLights(nowParam); break;
     case 7: theatreChase(nowParam); break;
+    case 8: xmasLights(nowParam); break;
+    case 9: confetti_pal(nowParam); break;
+    case 10: xmasLightsFade(nowParam); break;
   }
   if (randomTimer.isReady()) {
-    nowMode = random(7);
+    nowMode = random(10);
     nowParam = random(255);
     randomTimer.setInterval(random(20000));
   }
@@ -114,6 +117,15 @@ void runningLights(byte param) {
     counter = 0;
   }
 }
+
+byte abs0(double p) {
+  if (p >= 0) {
+    return byte(p);
+  } else {
+    return (byte)0;
+  }
+}
+
 void theatreChase(byte param) {
   static byte counter = 0;
   if (!dotsTimer.isReady()) return;
@@ -127,7 +139,76 @@ void theatreChase(byte param) {
   }
 }
 
+void xmasLights(byte param) {
+  static byte counter = 0;
+  static byte minimal = 50;
+  static double mult = 0.005 * param;
+  if (counter < ((2 * PI) / mult)) {
+    counter += 1;
+    for (int i = 0; i < NUMPIXELS; i += 4) {
+      byte r = fade8(255, abs0(sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(r, 0, 0));
+    }
+    
+    for (int i = 1; i < NUMPIXELS; i += 4) {
+      byte r = fade8(255, abs0(-sin(mult * counter) * (255 - minimal)) + minimal);
+      byte g = fade8(208, abs0(-sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(r, g, 0));
+    }
+    for (int i = 2; i < NUMPIXELS; i += 4) {
+      byte g = fade8(255, abs0(sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(0, g, 0));
+    }
+    for (int i = 3; i < NUMPIXELS; i += 4) {
+      byte b = fade8(255, abs0(-sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(0, 0, b));
+    }
+  } else {
+    counter = 0;
+  }
+}
 
+void confetti_pal(byte thisfade) { 
+  static byte counter = 0;                                                                                            
+  if (NUMPIXELS >= 10) {
+    for (int i = 0; i < NUMPIXELS; i += 1) {
+      
+      pixels.set(i, mWheel8(counter, thisfade));
+    }
+    uint8_t pos = (uint8_t)random(0, NUMPIXELS);
+    pixels.set(pos, mWheel8((uint8_t)random(0, 255)));
+    counter += 1;                                                                                        
+  }
+}
+
+void xmasLightsFade(byte param) {
+  static byte counter = 0;
+  static byte minimal = 50;
+  static double mult = 0.005 * param;
+  if (counter < ((2 * PI) / mult)) {
+    counter += 1;
+    for (int i = 0; i < NUMPIXELS; i += 4) {
+      byte r = fade8(255, abs0(sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(r, 0, 0));
+    }
+    
+    for (int i = 1; i < NUMPIXELS; i += 4) {
+      byte r = fade8(255, abs0(sin(mult * counter) * (255 - minimal)) + minimal);
+      byte g = fade8(208, abs0(sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(r, g, 0));
+    }
+    for (int i = 2; i < NUMPIXELS; i += 4) {
+      byte g = fade8(255, abs0(sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(0, g, 0));
+    }
+    for (int i = 3; i < NUMPIXELS; i += 4) {
+      byte b = fade8(255, abs0(sin(mult * counter) * (255 - minimal)) + minimal);
+      pixels.set(i, mRGB(0, 0, b));
+    }
+  } else {
+    counter = 0;
+  }
+}
 
 void breathing() {
   static int dir = 1;
